@@ -1,12 +1,12 @@
 import { Suspense, lazy, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAuthentificated, selectToken } from 'redux/selectors';
+import { selectAuthentificated } from 'redux/selectors';
 
 import { refreshUserThunk } from 'redux/authentifServices';
 
 import { Loader } from './components/Loader';
-import { AppNav, Container} from 'App.styled';
+import { AppNav, Container } from 'App.styled';
 import PrivateRoute from 'components/PrivateRoute/PrivateRoute';
 import UserMenu from 'components/UserMenu/UserMenu';
 import { Navigation } from 'components/Navigation/Navigation';
@@ -19,14 +19,11 @@ const ContactsPage = lazy(() => import('pages/ContactsPage'));
 
 export const App = () => {
   const dispatch = useDispatch();
-  const token = useSelector(selectToken);
   const authentificated = useSelector(selectAuthentificated);
 
   useEffect(() => {
-    if (!token || authentificated) return;
-
     dispatch(refreshUserThunk());
-  }, [token, dispatch, authentificated]);
+  }, [dispatch]);
 
   return (
     <Container>
