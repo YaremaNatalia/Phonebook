@@ -22,7 +22,7 @@ const ContactsPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!authentificated) return;
+    // if (!authentificated) return;
 
     dispatch(requestContactsThunk());
   }, [authentificated, dispatch]);
