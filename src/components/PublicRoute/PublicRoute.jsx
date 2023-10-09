@@ -4,9 +4,9 @@ import { Navigate } from 'react-router-dom';
 
 import { selectAuthentificated } from 'redux/selectors';
 
-const PrivateRoute = ({ children, redirectTo = '/' }) => {
+const PublicRoute = ({ children, redirectTo = '/' }) => {
   const isAuthentificated = useSelector(selectAuthentificated);
-  return isAuthentificated ? children : <Navigate to={redirectTo} />;
+  return isAuthentificated ? <Navigate to={redirectTo} /> : children;
 };
 
-export default PrivateRoute;
+export default PublicRoute;

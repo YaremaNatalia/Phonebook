@@ -1,7 +1,7 @@
 import { Suspense, lazy, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAuthentificated } from 'redux/selectors';
+import { selectAuthentificated, selectUserLoading } from 'redux/selectors';
 
 import { refreshUserThunk } from 'redux/authentifServices';
 
@@ -11,6 +11,7 @@ import PrivateRoute from 'components/PrivateRoute/PrivateRoute';
 import UserMenu from 'components/UserMenu/UserMenu';
 import { Navigation } from 'components/Navigation/Navigation';
 import { AuthentifNav } from 'components/AuthentifNav/AuthentifNav';
+import PublicRoute from 'components/PublicRoute/PublicRoute';
 
 const HomePage = lazy(() => import('pages/HomePage'));
 const LoginPage = lazy(() => import('pages/LoginPage'));
@@ -20,6 +21,7 @@ const ContactsPage = lazy(() => import('pages/ContactsPage'));
 export const App = () => {
   const dispatch = useDispatch();
   const authentificated = useSelector(selectAuthentificated);
+  const isLoading = useSelector(selectUserLoading);
 
   useEffect(() => {
     dispatch(refreshUserThunk());
@@ -27,30 +29,49 @@ export const App = () => {
 
   return (
     <Container>
-      <header>
-        <AppNav>
-          <Navigation />
-          {authentificated ? <UserMenu /> : <AuthentifNav />}
-        </AppNav>
-      </header>
-      <main>
-        <Suspense fallback={<Loader />}>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route
-              path="/contacts"
-              element={
-                <PrivateRoute redirectTo="/login">
-                  <ContactsPage />
-                </PrivateRoute>
-              }
-            />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </Suspense>
-      </main>
+      {!isLoading && (
+        <>
+          <header>
+            <AppNav>
+              <Navigation />
+              {authentificated ? <UserMenu /> : <AuthentifNav />}
+            </AppNav>
+          </header>
+          <main>
+            <Suspense fallback={<Loader />}>
+              <Routes>
+                {/* <Route path="/" element={<Navigation />} /> */}
+                <Route index element={<HomePage />} />
+                <Route
+                  path="/register"
+                  element={
+                    <PublicRoute redirectTo="/contacts">
+                      <RegisterPage />
+                    </PublicRoute>
+                  }
+                />
+                <Route
+                  path="/login"
+                  element={
+                    <PublicRoute redirectTo="/contacts">
+                      <LoginPage />
+                    </PublicRoute>
+                  }
+                />
+                <Route
+                  path="/contacts"
+                  element={
+                    <PrivateRoute redirectTo="/login">
+                      <ContactsPage />
+                    </PrivateRoute>
+                  }
+                />
+                <Route path="*" element={<Navigate to="/" />} />
+              </Routes>
+            </Suspense>
+          </main>
+        </>
+      )}
     </Container>
   );
 };
