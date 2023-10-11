@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserLoading } from 'redux/selectors';
@@ -9,7 +9,6 @@ import { Loader } from './components/Loader';
 import { Container } from 'App.styled';
 import PrivateRoute from 'components/PrivateRoute/PrivateRoute';
 import PublicRoute from 'components/PublicRoute/PublicRoute';
-// import { AppBar } from 'components/AppBar/AppBar';
 import { Layout } from 'Layout';
 
 const HomePage = lazy(() => import('pages/HomePage'));
@@ -27,12 +26,12 @@ export const App = () => {
 
   return (
     <Container>
-      {!isLoading && (
+      {isLoading ? (
+        <Loader />
+      ) : (
         <>
-          {/* <AppBar /> */}
-          <Suspense fallback={<Loader />}>
-            <Routes>
-              <Route path="/" element={<Layout />} />
+          <Routes>
+            <Route path="/" element={<Layout />}>
               <Route index element={<HomePage />} />
               <Route
                 path="/register"
@@ -58,9 +57,9 @@ export const App = () => {
                   </PrivateRoute>
                 }
               />
-              <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
-          </Suspense>
+            </Route>
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
         </>
       )}
     </Container>
