@@ -9,7 +9,7 @@ import { Loader } from './components/Loader';
 import { Container } from 'App.styled';
 import PrivateRoute from 'components/PrivateRoute/PrivateRoute';
 import PublicRoute from 'components/PublicRoute/PublicRoute';
-import { AppBar } from 'components/AppBar/AppBar';
+// import { AppBar } from 'components/AppBar/AppBar';
 import { Layout } from 'Layout';
 
 const HomePage = lazy(() => import('pages/HomePage'));
