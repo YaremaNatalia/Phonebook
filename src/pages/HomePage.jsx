@@ -4,7 +4,7 @@ import { HomeContainer, HomeTitle } from './HomePage.styled';
 const HomePage = () => {
   return (
     <HomeContainer>
-      <HomeTitle>PHONE BOOK</HomeTitle>
+      <HomeTitle>PHONEBOOK</HomeTitle>
     </HomeContainer>
   );
 };
